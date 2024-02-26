@@ -16,17 +16,17 @@ What Ansible script is doing:
 ## How to use
 
 1. Edit your DNS zone to bound your domain and your IP, so Let's Encrypt could check that you have rights on your domain name.
-1. Put your varialbes in ansible/roles/wordpress/vars/main.yaml
+1. Put your variables in ansible/roles/wordpress/vars/main.yaml
 1. Add you server to inventory.ini
 1. Run ansible: `ansible-playbook site.yaml -i inventory.ini`
 1. Cert-bot should successfully received certificate `docker logs certbot`
-1. After that uncoment NGINX configuraition for SSL `ansible/roles/wordpress/template/nginx.conf.j2`
-1. Running ansible job again or uncoment on server and execute `docker restart webserver`
+1. After that uncomment NGINX configuration for SSL `ansible/roles/wordpress/template/nginx.conf.j2`
+1. Running ansible job again or uncomment on server and execute `docker restart webserver`
 
 ## Wordpress plugins
 
-1. Object Cache - for redis cahcing (need to enable chaching on after activation)
-1. WP Super Cache - html caching (need to enable chaching on after activation)
+1. Object Cache - for redis caching (need to enable caching on after activation)
+1. WP Super Cache - html caching (need to enable caching on after activation)
 1. Classic Editor
 1. All In One WP Security
 
