@@ -21,7 +21,7 @@ What Ansible script is doing:
 1. Run ansible: `ansible-playbook site.yaml -i inventory.ini`
 1. Cert-bot should successfully received certificate `docker logs certbot`
 1. After that uncomment NGINX configuration for SSL `ansible/roles/wordpress/template/nginx.conf.j2`
-1. Running ansible job again or uncomment on server and execute `docker restart webserver`
+1. Running ansible job again or uncomment SSL block in <user>/wordpress/nginx-conf/nginx.conf on server and execute `docker restart webserver`
 
 ## Wordpress plugins
 
