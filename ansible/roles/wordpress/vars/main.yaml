@@ -1,0 +1,26 @@
+linux_user: sup
+folder_with_files: 123
+
+domain_name: example.com
+admin_email: name@example.com
+mysql_root_password: <your_root_password>
+wordpress_database: <name_of_database_for_wordpress>
+wordpress_database_user: <db_user_for_wordpress>
+wordpress_database_password: <db_password_for_wordpress>
+
+wordpress_container_name: wordpress
+wordpress_container_image: wordpress:6.4.3-php8.1-fpm-alpine
+nginx_container_name: webserver
+nginx_container_image: nginx:mainline-alpine
+redis_container_name: redis
+redis_container_image: redis:latest
+mysql_container_name: db
+mysql_container_image: mariadb:lts
+certbot_container_name: certbot
+certbot_container_image: certbot/certbot
+
+wordpress_volume_name: wp_data
+certbot_volume_name: certbot-etc
+mysql_volume_name: db_data
+
+network_name: app-network

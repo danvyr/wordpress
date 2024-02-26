@@ -1,0 +1,92 @@
+version: '3'
+
+services:
+  db:
+    image: {{ mysql_container_image }}
+    container_name: {{ mysql_container_name }}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+    volumes:
+      - {{ mysql_volume_name }}:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+    networks:
+      - app-network
+    logging:
+      options:
+        max-size: "25m"
+
+  wordpress:
+    depends_on:
+      - {{ mysql_container_name }}
+    image: {{ wordpress_container_image }}
+    container_name: {{ wordpress_container_name }}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - WORDPRESS_DB_HOST={{ mysql_container_name }}:3306
+      - "WORDPRESS_DB_USER=${WORDPRESS_DB_USER}"
+      - "WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}"
+      - "WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}"
+    volumes:
+      - {{ wordpress_volume_name }}:/var/www/html
+    networks:
+      - {{ network_name }}
+    logging:
+      options:
+        max-size: "25m"
+
+  webserver:
+    depends_on:
+      - {{ wordpress_container_name }}
+    image: {{ nginx_container_image }}
+    container_name: {{ nginx_container_name }}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - wp_data:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - {{ certbot_volume_name }}:/etc/letsencrypt
+    networks:
+      - {{ network_name }}
+    logging:
+      options:
+        max-size: "250m"
+
+  redis:
+    image: {{ redis_container_image }}
+    restart: always
+    container_name: {{ redis_container_name }}
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # ports:  
+      # - "6379:6379"
+    networks:
+      - {{ network_name }}
+    # launch Redis in cache mode with :
+    #  - max memory up to 50% of your RAM if needed (--maxmemory 512mb)
+    #  - deleting oldest data when max memory is reached (--maxmemory-policy allkeys-lru)
+    # entrypoint: ["redis-server", "--maxmemory 512mb", "-maxmemory-policy allkeys-lru"]
+
+
+  certbot:
+    depends_on:
+      - webserver
+    image: {{ certbot_container_image }}
+    container_name: {{ certbot_container_name }}
+    volumes:
+      - {{ certbot_volume_name }}:/etc/letsencrypt
+      - {{ wordpress_volume_name }}:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email {{ admin_email }} --agree-tos --no-eff-email --force-renewal -d {{ domain_name }} -d www.{{ domain_name }}
+    logging:
+      options:
+       max-size: "25m"
+
