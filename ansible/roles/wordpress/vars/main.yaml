@@ -1,5 +1,5 @@
-linux_user: sup
-folder_with_files: 123
+linux_user: user10
+folder_with_files: wordpress
 
 domain_name: example.com
 admin_email: name@example.com

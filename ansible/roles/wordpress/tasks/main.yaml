@@ -42,53 +42,53 @@
     owner: "{{ linux_user }}"
     group: "{{ linux_user }}"
 
-# - name: Up wordpress docker_compose
-#   community.docker.docker_compose:
-#     project_src: "/home/{{ linux_user }}/wordpress"
-#     state: present
+- name: Up wordpress docker_compose
+  community.docker.docker_compose:
+    project_src: "/home/{{ linux_user }}/wordpress"
+    state: present
 
-# - name: Add certbot to crontab
-#   ansible.builtin.cron:
-#     name: "docker restart {{ certbot_container_name }}"
-#     minute: "0"
-#     hour: "3"
-#     day: "*/10"
-#     job: "docker restart {{ certbot_container_name }}"
+- name: Add certbot to crontab
+  ansible.builtin.cron:
+    name: "docker restart {{ certbot_container_name }}"
+    minute: "0"
+    hour: "3"
+    day: "*/10"
+    job: "docker restart {{ certbot_container_name }}"
 
-# - name: Set Wordpress parameters to wp-config.php
-#   ansible.builtin.lineinfile:
-#     path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/wp-config.php
-#     insertafter: 25
-#     line: "{{ item }}"
-#   loop:
-#     - "define( 'WP_HOME','https://{{ domain_name }}' );"
-#     - "define( 'WP_SITEURL','https://{{ domain_name }}' );"
-#     - "define( 'W3TC_CONFIG_CACHE_ENGINE', 'redis');"
-#     - "define(' WP_CACHE', true);"
-#     - "define( 'WP_REDIS_HOST', '{{ redis_container_name }}' );"
-#     - "define( 'WP_REDIS_PORT', 6379 );"
+- name: Set Wordpress parameters to wp-config.php
+  ansible.builtin.lineinfile:
+    path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/wp-config.php
+    insertafter: 25
+    line: "{{ item }}"
+  loop:
+    - "define( 'WP_HOME','https://{{ domain_name }}' );"
+    - "define( 'WP_SITEURL','https://{{ domain_name }}' );"
+    - "define( 'W3TC_CONFIG_CACHE_ENGINE', 'redis');"
+    - "define(' WP_CACHE', true);"
+    - "define( 'WP_REDIS_HOST', '{{ redis_container_name }}' );"
+    - "define( 'WP_REDIS_PORT', 6379 );"
 
-# # For debugin Certbot
-# - name: For debugin Certbot create a directory well-known/acme-challenge
-#   ansible.builtin.file:
-#     path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/.well-known/acme-challenge
-#     state: directory
-#     owner: 82
-#     group: 82
-#     mode: "0777"
+# For debugin Certbot
+- name: For debugin Certbot create a directory well-known/acme-challenge
+  ansible.builtin.file:
+    path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/.well-known/acme-challenge
+    state: directory
+    owner: 82
+    group: 82
+    mode: "0777"
 
-# - name: For debugin Certbot. Create .well-known/acme-challenge/check
-#   ansible.builtin.file:
-#     path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/.well-known/acme-challenge/check
-#     state: touch
-#     owner: 82
-#     group: 82
-#     mode: "0444"
+- name: For debugin Certbot. Create .well-known/acme-challenge/check
+  ansible.builtin.file:
+    path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/.well-known/acme-challenge/check
+    state: touch
+    owner: 82
+    group: 82
+    mode: "0444"
 
-# - name: Recursively change ownership of a directory
-#   ansible.builtin.file:
-#     path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/
-#     state: directory
-#     recurse: true
-#     owner: 82
-#     group: 82
+- name: Recursively change ownership of a directory
+  ansible.builtin.file:
+    path: /var/lib/docker/volumes/wordpress_{{ wordpress_volume_name }}/_data/
+    state: directory
+    recurse: true
+    owner: 82
+    group: 82

@@ -2,5 +2,5 @@
 - name: Install wordpress
   hosts: wordpress
   roles:
-    # - base
+    - base
     - wordpress
