@@ -25,8 +25,8 @@ What Ansible script is doing:
 
 ## Wordpress plugins
 
-1. Object Cache - for redis cahcing (need to chaching on after activation)
-1. WP Super Cache - html caching (need to chaching on after activation)
+1. Object Cache - for redis cahcing (need to enable chaching on after activation)
+1. WP Super Cache - html caching (need to enable chaching on after activation)
 1. Classic Editor
 1. All In One WP Security
 
